@@ -13,7 +13,7 @@ from weasyprint import HTML
 from PIL import Image, ImageDraw, ImageFont
 
 from scanner.link_scanner import LinkScanner
-from tests.test_link_scanner_combined import StubExecutor  # FIXME: replace with BrowserExecutor when available
+from app.scanner.fake_executor import FakeExecutor as StubExecutor
 
 ReportData = Dict[str, Any]
 
