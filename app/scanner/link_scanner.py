@@ -25,9 +25,7 @@ except Exception:
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-if not logger.handlers:
-    logger.addHandler(handler)
+# לא מוסיפים handlers ברמת מודול; הקונפיג הכללי נעשה בנקודת הכניסה (uvicorn/main)
 
 def _norm_reasons(x: Any) -> List[str]:
     """נרמול reasons לרשימת strings נקייה"""
