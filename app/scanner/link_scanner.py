@@ -206,6 +206,9 @@ class LinkScanner:
 
     def _evaluate(self, raw: Dict[str, Any], signals: Dict[str, Dict[str, Any]], result: ScanResult) -> None:
         cfg = from_scanner(self)
+        def _w(key: str) -> int:
+            # זהה לערכים שהיו ב-self.SIGNAL_WEIGHTS; אין שינוי התנהגות.
+            return cfg.signal_weights[key]
         # 1. fetch errors → malicious
         if raw.get("error"):
             self._mark_malicious(result, f"Fetch error: {raw['error']}")
@@ -220,24 +223,24 @@ class LinkScanner:
             self._mark_suspicious(
                 result,
                 "Detected console messages",
-                score_increment=self.SIGNAL_WEIGHTS["console"]
+                score_increment=_w("console")
             )
         # 4. Multiple redirects (signal, unified result)
         rd = detect_redirects(raw, threshold=cfg.redirect_threshold)
         for r in rd.get("reasons", []):
-            self._mark_suspicious(result, r, score_increment=self.SIGNAL_WEIGHTS["redirect"])
+            self._mark_suspicious(result, r, score_increment=_w("redirect"))
         # 5. URL keywords (signal, unified result)
         url_sig = detect_url_keywords(result.final_url)
         for r in url_sig.get("reasons", []):
-            self._mark_suspicious(result, r, score_increment=self.SIGNAL_WEIGHTS["url_keyword"])
+            self._mark_suspicious(result, r, score_increment=_w("url_keyword"))
         # 6. Visual/OCR signals
-        self._apply_suspicious_signals(result, signals["visual"], "alerts", self.SIGNAL_WEIGHTS["ocr"])
+        self._apply_suspicious_signals(result, signals["visual"], "alerts", _w("ocr"))
         # 7. Iframe signals
         if signals["iframe"].get("suspicious_iframes_found"):
-            self._apply_suspicious_signals(result, signals["iframe"], "reasons", self.SIGNAL_WEIGHTS["iframe"])
+            self._apply_suspicious_signals(result, signals["iframe"], "reasons", _w("iframe"))
         # 8. JS analysis signals
         if signals["js"].get("suspicious_js_found"):
-            self._apply_suspicious_signals(result, signals["js"], "alerts", self.SIGNAL_WEIGHTS.get("js", 25))
+            self._apply_suspicious_signals(result, signals["js"], "alerts", cfg.signal_weights.get("js", 25))
         # 10. final status
         if result.risk_score >= self.MALICIOUS_THRESHOLD:
             result.status = "malicious"
