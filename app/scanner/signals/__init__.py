@@ -8,8 +8,8 @@ from .network_anomaly_signal import collect_network_anomalies
 from .js_behavior_signal import detect_js_behaviors
 from .iframe_signal import detect_suspicious_iframes
 from .visual_signal import detect_visual_signals
-from .url_keyword_signal import has_suspicious_url_keyword
-from .redirect_signal import has_multiple_redirects
+from .url_keyword_signal import detect_url_keywords, has_suspicious_url_keyword
+from .redirect_signal import detect_redirects, has_multiple_redirects
 
 __all__ = [
     "NetworkRequestCollector",
@@ -17,7 +17,9 @@ __all__ = [
     "detect_js_behaviors",
     "detect_suspicious_iframes",
     "detect_visual_signals",
+    "detect_url_keywords",
     "has_suspicious_url_keyword",
+    "detect_redirects",
     "has_multiple_redirects",
 ]
 

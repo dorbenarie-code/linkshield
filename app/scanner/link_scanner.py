@@ -16,10 +16,10 @@ except Exception:
     def detect_suspicious_iframes(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
         return {}
 try:
-    from app.scanner.signals.redirect_signal import has_multiple_redirects  # type: ignore[reportMissingImports]
+    from app.scanner.signals.redirect_signal import detect_redirects  # type: ignore[reportMissingImports]
 except Exception:
-    def has_multiple_redirects(_: Any, threshold: int = 2) -> bool:  # fallback
-        return False
+    def detect_redirects(_: Any, threshold: int = 2) -> Dict[str, Any]:  # fallback
+        return {"reasons": []}
 try:
     from app.scanner.signals.network_anomaly_signal import collect_network_anomalies  # type: ignore[reportMissingImports]
 except Exception:
@@ -31,10 +31,10 @@ except Exception:
     def detect_visual_signals(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
         return {}
 try:
-    from app.scanner.signals.url_keyword_signal import has_suspicious_url_keyword  # type: ignore[reportMissingImports]
+    from app.scanner.signals.url_keyword_signal import detect_url_keywords  # type: ignore[reportMissingImports]
 except Exception:
-    def has_suspicious_url_keyword(url: str) -> bool:  # fallback
-        return False
+    def detect_url_keywords(url: str) -> Dict[str, Any]:  # fallback
+        return {"reasons": []}
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -219,21 +219,15 @@ class LinkScanner:
                 "Detected console messages",
                 score_increment=self.SIGNAL_WEIGHTS["console"]
             )
-        # 4. Multiple redirects (moved to signal)
+        # 4. Multiple redirects (signal, unified result)
         thr = getattr(self, "SUSPICIOUS_REDIRECT_COUNT", 2)
-        if has_multiple_redirects(raw, threshold=thr):
-            self._mark_suspicious(
-                result,
-                "Multiple redirects detected",
-                score_increment=self.SIGNAL_WEIGHTS["redirect"]
-            )
-        # 5. URL keywords (moved to signal)
-        if has_suspicious_url_keyword(result.final_url):
-            self._mark_suspicious(
-                result,
-                "Suspicious keywords in URL",
-                score_increment=self.SIGNAL_WEIGHTS["url_keyword"]
-            )
+        rd = detect_redirects(raw, threshold=thr)
+        for r in rd.get("reasons", []):
+            self._mark_suspicious(result, r, score_increment=self.SIGNAL_WEIGHTS["redirect"])
+        # 5. URL keywords (signal, unified result)
+        url_sig = detect_url_keywords(result.final_url)
+        for r in url_sig.get("reasons", []):
+            self._mark_suspicious(result, r, score_increment=self.SIGNAL_WEIGHTS["url_keyword"])
         # 6. Visual/OCR signals
         self._apply_suspicious_signals(result, signals["visual"], "alerts", self.SIGNAL_WEIGHTS["ocr"])
         # 7. Iframe signals

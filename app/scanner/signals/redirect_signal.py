@@ -1,11 +1,8 @@
 from typing import Any
+from .types import SignalResult
 
-def has_multiple_redirects(result: Any, threshold: int = 2) -> bool:
-    """
-    Returns True if the number of redirects >= threshold.
-    Works with fields named redirects/redirect_chain/history, or None.
-    No behavioral change - only extracts logic to a module.
-    """
+def detect_redirects(result: Any, threshold: int = 2) -> SignalResult:
+    """Unified format: reasons + meta; reason string remains identical."""
     # Support both dict and object with attributes
     if isinstance(result, dict):
         chain = (
@@ -22,7 +19,13 @@ def has_multiple_redirects(result: Any, threshold: int = 2) -> bool:
             or []
         )
     try:
-        return len(chain) >= threshold
+        count = len(chain)
     except TypeError:
-        return False
+        count = 0
+    reasons = ["Multiple redirects detected"] if count >= threshold else []
+    return {"reasons": reasons, "meta": {"count": count, "threshold": threshold}}
+
+def has_multiple_redirects(result: Any, threshold: int = 2) -> bool:
+    """Backward compatibility shim."""
+    return bool(detect_redirects(result, threshold=threshold).get("reasons"))
 
