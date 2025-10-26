@@ -1,0 +1,143 @@
+{
+  "tests": [
+    {
+      "url": "https://expired.badssl.com",
+      "raw": {
+        "url": "https://expired.badssl.com",
+        "status_code": null,
+        "final_url": null,
+        "load_time_ms": null,
+        "redirects": [],
+        "cookies": [],
+        "console_messages": [],
+        "iframes": [],
+        "screenshot": null,
+        "error": "Page.goto: net::ERR_CERT_DATE_INVALID at https://expired.badssl.com/\nCall log:\n  - navigating to \"https://expired.badssl.com/\", waiting until \"networkidle\"\n",
+        "iframe_analysis": {
+          "suspicious_iframes_found": false,
+          "reasons": []
+        },
+        "visual_analysis": {
+          "suspicious": false,
+          "alerts": [],
+          "ocr_text": ""
+        },
+        "js_analysis": {
+          "suspicious_js_found": false,
+          "alerts": [],
+          "matched_patterns": [],
+          "match_count": 0,
+          "console_entries": [],
+          "html_entries": [],
+          "js_raw_entries": []
+        }
+      },
+      "final_url": null,
+      "status": "malicious",
+      "risk_score": 100,
+      "reasons": [
+        "Fetch error: Page.goto: net::ERR_CERT_DATE_INVALID at https://expired.badssl.com/\nCall log:\n  - navigating to \"https://expired.badssl.com/\", waiting until \"networkidle\"\n"
+      ]
+    },
+    {
+      "url": "https://example.com",
+      "raw": {
+        "url": "https://example.com",
+        "status_code": 200,
+        "final_url": "https://example.com/",
+        "load_time_ms": 1173,
+        "redirects": [],
+        "cookies": [],
+        "console_messages": [],
+        "iframes": [],
+        "screenshot": "reports/screenshot.png",
+        "error": null,
+        "iframe_analysis": {
+          "suspicious_iframes_found": false,
+          "reasons": []
+        },
+        "visual_analysis": {
+          "suspicious": false,
+          "alerts": [],
+          "ocr_text": ""
+        },
+        "js_analysis": {
+          "suspicious_js_found": false,
+          "alerts": [],
+          "matched_patterns": [],
+          "match_count": 0,
+          "console_entries": [],
+          "html_entries": [],
+          "js_raw_entries": []
+        }
+      },
+      "final_url": "https://example.com/",
+      "status": "clean",
+      "risk_score": 0,
+      "reasons": []
+    },
+    {
+      "url": "https://accounts.google.com/login",
+      "raw": {
+        "url": "https://accounts.google.com/login",
+        "status_code": 200,
+        "final_url": "https://accounts.google.com/v3/signin/identifier?ifkv=ASKV5MjtGMTl80sZ1fObt3S5XrK0VU_Oz_qaGTLQjljdn4lCPR5ovfTieGvbhEBQmXHNsITHUgnH&flowName=WebLiteSignIn&flowEntry=ServiceLogin&dsh=S706449836%3A1747826549108657",
+        "load_time_ms": 1528,
+        "redirects": [
+          "https://accounts.google.com/login",
+          "https://accounts.google.com/InteractiveLogin?ifkv=ASKV5MgJChZ368DXDKjHyIUjXomC9Q1Hq4dnpv54EnRntWXEEGtIRW7_imz8kFgPBc_Dx4uWkqu1"
+        ],
+        "cookies": [
+          {
+            "name": "__Host-GAPS",
+            "value": "1:GvfROxMsC2AEZuxJcDx_49sBKGEGnA:7LCd_VLkb_-vTOgs",
+            "domain": "accounts.google.com",
+            "path": "/",
+            "expires": 1782386549.622095,
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax"
+          }
+        ],
+        "console_messages": [],
+        "iframes": [
+          {
+            "src": "/_/bscframe",
+            "width": 0,
+            "height": 0,
+            "opacity": "1",
+            "display": "none",
+            "visibility": "visible",
+            "sandbox": null
+          }
+        ],
+        "screenshot": "reports/screenshot.png",
+        "error": null,
+        "iframe_analysis": {
+          "suspicious_iframes_found": false,
+          "reasons": []
+        },
+        "visual_analysis": {
+          "suspicious": false,
+          "alerts": [],
+          "ocr_text": ""
+        },
+        "js_analysis": {
+          "suspicious_js_found": false,
+          "alerts": [],
+          "matched_patterns": [],
+          "match_count": 0,
+          "console_entries": [],
+          "html_entries": [],
+          "js_raw_entries": []
+        }
+      },
+      "final_url": "https://accounts.google.com/v3/signin/identifier?ifkv=ASKV5MjtGMTl80sZ1fObt3S5XrK0VU_Oz_qaGTLQjljdn4lCPR5ovfTieGvbhEBQmXHNsITHUgnH&flowName=WebLiteSignIn&flowEntry=ServiceLogin&dsh=S706449836%3A1747826549108657",
+      "status": "clean",
+      "risk_score": 30,
+      "reasons": [
+        "Suspicious redirect chain"
+      ]
+    }
+  ]
+}

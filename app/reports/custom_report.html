@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'nonce-gOI0vLYgqOXCLmUshp05LQ'; style-src 'self' https://cdn.jsdelivr.net;">
+  <title>🔐 LinkShield Security Test Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" nonce="gOI0vLYgqOXCLmUshp05LQ"></script>
+  <style nonce="gOI0vLYgqOXCLmUshp05LQ">
+    body { background-color: #f0f2f5; }
+    h1, h3 { text-align: center; }
+    .metric { font-size: 1rem; }
+    .status-pass    { color: #28a745; font-weight: bold; }
+    .status-fail    { color: #dc3545; font-weight: bold; }
+    .status-unknown { color: #6c757d; font-style: italic; }
+    .chart-container { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 2rem 0; }
+    canvas { background: #ffffff; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .table-wrapper { overflow-x: auto; }
+  </style>
+</head>
+<body class="container my-4">
+  <h1>🔐 LinkShield Security Test Report</h1>
+  <div class="row text-center mb-4">
+    <div class="col metric"><strong>Generated:</strong> 2025-05-21 14:52:16</div>
+    <div class="col metric"><strong>Duration:</strong> 0.00s</div>
+    <div class="col metric"><strong>Success:</strong> 0.0%</div>
+  </div>
+  <div class="chart-container">
+    <canvas id="resultChart" width="300" height="300"></canvas>
+    <canvas id="scoreChart"  width="300" height="300"></canvas>
+  </div>
+  <script nonce="gOI0vLYgqOXCLmUshp05LQ">
+    // Doughnut chart: pass vs fail
+    new Chart(document.getElementById('resultChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ["Passed", "Failed"],
+        datasets: [{
+          data: [0, 0],
+          backgroundColor: ['#28a745', '#dc3545'],
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed.toLocaleString() } }
+        }
+      }
+    });
+
+    // Bar chart: risk distribution
+    new Chart(document.getElementById('scoreChart'), {
+      type: 'bar',
+      data: {
+        labels: ["0\u201330", "31\u201360", "61\u201389", "90\u2013100"],
+        datasets: [{
+          label: 'Number of Tests',
+          data: [2, 0, 0, 1],
+          backgroundColor: '#3498db',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 }
+          }
+        },
+        plugins: {
+          tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y } }
+        }
+      }
+    });
+  </script>
+
+  <h3>🧪 Test Details</h3>
+  <div class="table-wrapper">
+    <table class="table table-hover">
+      <thead class="table-secondary">
+        <tr><th>Test Name</th><th>Status</th><th>Risk Score</th></tr>
+      </thead>
+      <tbody>
+<tr><td>Unnamed Test</td><td class='status-malicious'>Malicious</td><td>100</td></tr>
+<tr><td>Unnamed Test</td><td class='status-clean'>Clean</td><td>0</td></tr>
+<tr><td>Unnamed Test</td><td class='status-clean'>Clean</td><td>30</td></tr>
+
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

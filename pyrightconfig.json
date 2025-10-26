@@ -1,0 +1,18 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "include": ["app", "tests", "scripts"],
+  "exclude": ["venv", "venv*/", "**/__pycache__", "**/.pytest_cache"],
+  "reportMissingTypeStubs": false,
+  "typeCheckingMode": "standard",
+  "pythonVersion": "3.12",
+  "pythonPlatform": "Linux",
+  "reportMissingImports": true,
+  "useLibraryCodeForTypes": true,
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": ["."]
+    }
+  ]
+}

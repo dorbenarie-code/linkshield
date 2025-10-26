@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.dist/
+build/
+dist/
+
+# Tests/Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+
+# Logs & env
+*.log
+.env
+.env.*
+*.pem
+*.key
+*.crt

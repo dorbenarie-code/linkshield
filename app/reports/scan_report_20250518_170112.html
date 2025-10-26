@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>LinkShield Scan Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .box { border: 1px solid #ccc; padding: 15px; border-radius: 8px; max-width: 600px; }
+        .status { font-weight: bold; color: #2ecc71; }
+        .score { font-weight: bold; color: #2ecc71; }
+        .export-btn {
+            display: inline-block; margin-top: 15px; padding: 8px 12px;
+            text-decoration: none; border: 1px solid #34495e; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 LinkShield Scan Report</h1>
+    <div class="box">
+        <p><strong>URL:</strong> https://paypal.com</p>
+        <p><strong>Status:</strong> <span class="status">clean</span></p>
+        <p><strong>Risk Score:</strong> <span class="score">0</span></p>
+        <p><strong>Reasons:</strong></p>
+        <ul>
+            <li>No issues detected</li>
+        </ul>
+        <!-- בעתיד ניתן להמיר ל-PDF באמצעות weasyprint/wkhtmltopdf -->
+        <a href="#" class="export-btn" onclick="alert('Export to PDF: TBD')">📄 Export as PDF</a>
+    </div>
+</body>
+</html>

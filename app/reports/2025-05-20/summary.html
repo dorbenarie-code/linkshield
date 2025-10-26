@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkShield Dashboard</title>
+  <style>
+      body { font-family: Arial, sans-serif; margin:20px; background:#f4f7fa; }
+      h1 { color:#343a40; }
+      #filter { margin-bottom:10px; padding:8px; width:30%; }
+      table { width:100%; border-collapse:collapse; background:#fff; }
+      th, td { padding:12px; border:1px solid #dee2e6; }
+      th { background:#495057; color:#fff; cursor:pointer; }
+      tr:hover { background:#e9ecef; }
+      .badge { padding:4px 8px; border-radius:12px; color:#fff; font-size:0.9em; }
+      .status-clean      { background:#28a745; }
+      .status-suspicious { background:#ffc107; }
+      .status-malicious  { background:#dc3545; }
+      .progress-bar-container { width:100px; background:#e9ecef; border-radius:4px; overflow:hidden; display:inline-block; vertical-align:middle; }
+      .progress-bar     { height:8px; background:#17a2b8; }
+      .score-number     { margin-left:6px; font-weight:bold; }
+      canvas            { max-width:400px; margin-top:30px; }
+    </style>
+</head>
+<body>
+  <h1>🔎 LinkShield Scan Dashboard</h1>
+
+  <input id="filter" type="text" placeholder="Filter URLs..." onkeyup="filterTable()" />
+
+  <table id="summary">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">#</th>
+        <th onclick="sortTable(1)">URL</th>
+        <th onclick="sortTable(2)">Status</th>
+        <th onclick="sortTable(3, true)">Risk</th>
+        <th>HTML</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+                <tr>
+                    <td>1</td>
+                    <td>https://phishing-site1.com</td>
+                    <td><span class="badge status-malicious">Malicious</span></td>
+                    <td><div class="progress-bar-container">  <div class="progress-bar" style="width:95%"></div></div><span class="score-number">95</span></td>
+                    <td><a href="reports/test_http_error.html" target="_blank" title="Open HTML Report">🔍</a></td>
+                    <td><a href="reports/test_http_error.pdf" target="_blank" title="Download PDF Report">📄</a></td>
+                </tr>
+            
+
+                <tr>
+                    <td>2</td>
+                    <td>https://example.com</td>
+                    <td><span class="badge status-clean">Clean</span></td>
+                    <td><div class="progress-bar-container">  <div class="progress-bar" style="width:10%"></div></div><span class="score-number">10</span></td>
+                    <td><a href="reports/test_safe_url.html" target="_blank" title="Open HTML Report">🔍</a></td>
+                    <td><a href="reports/test_safe_url.pdf" target="_blank" title="Download PDF Report">📄</a></td>
+                </tr>
+            
+
+                <tr>
+                    <td>3</td>
+                    <td>https://suspicious-site.org</td>
+                    <td><span class="badge status-suspicious">Suspicious</span></td>
+                    <td><div class="progress-bar-container">  <div class="progress-bar" style="width:68%"></div></div><span class="score-number">68</span></td>
+                    <td><a href="reports/test_suspicious_keyword.html" target="_blank" title="Open HTML Report">🔍</a></td>
+                    <td><a href="reports/test_suspicious_keyword.pdf" target="_blank" title="Download PDF Report">📄</a></td>
+                </tr>
+            
+    </tbody>
+  </table>
+
+  <canvas id="riskChart"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const data = {
+      labels: ['Low','Medium','High'],
+      datasets: [{
+        data: [1,1,1],
+        backgroundColor: ['#28a745','#ffc107','#dc3545']
+      }]
+    };
+    new Chart(document.getElementById('riskChart'), { type:'doughnut', data });
+  </script>
+
+  <script>
+      // Filter table rows by URL
+      function filterTable() {
+        const term = document.getElementById('filter').value.toLowerCase();
+        document.querySelectorAll('#summary tbody tr').forEach(row => {
+          row.style.display = row.cells[1].textContent.toLowerCase().includes(term) ? '' : 'none';
+        });
+      }
+
+      // Sort table columns; numeric sort if specified
+      function sortTable(colIdx, isNumeric = false) {
+        const table = document.getElementById('summary');
+        const tbody = table.tBodies[0];
+        Array.from(tbody.rows)
+          .sort((rowA, rowB) => {
+            const valA = rowA.cells[colIdx].textContent.trim();
+            const valB = rowB.cells[colIdx].textContent.trim();
+            return isNumeric
+              ? parseFloat(valA) - parseFloat(valB)
+              : (valA > valB ? 1 : -1);
+          })
+          .forEach(row => tbody.appendChild(row));
+      }
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>🔍 LinkShield Scan Report</title>
+  <style>:root { --status-color: #2ecc71; --risk-color:   #2ecc71; }
+
+body { font-family: Arial, sans-serif; margin: 2rem; }
+.box { border: 1px solid #ccc; padding: 1.5rem; border-radius: 8px; max-width: 800px; }
+.status { font-weight: bold; color: var(--status-color); }
+.score  { font-weight: bold; color: var(--risk-color); }
+.export-btn {
+  display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem;
+  text-decoration: none; border: 1px solid #34495e; border-radius: 4px;
+}
+.screenshot img {
+  max-width: 100%; border: 1px solid #ccc; border-radius: 4px;
+}
+.risk-bar-container {
+  background-color: #eee; border-radius: 10px; height: 20px; width: 100%;
+  margin-bottom: 1rem; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+.risk-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease-in-out; }
+</style>
+</head>
+<body>
+  <h1>🔍 LinkShield Scan Report</h1>
+  <div class="box">
+    <p><strong>URL:</strong> https://paypal.com</p>
+    <p><strong>Status:</strong> 
+      <span class="status">Clean</span>
+    </p>
+    <p><strong>Risk Score:</strong> 
+      <span class="score">30</span>
+    </p>
+    <div class="risk-bar-container">
+  <div class="risk-bar-fill" style="width:30%; background-color:#2ecc71;"></div>
+</div>
+
+    <p><strong>Reasons:</strong></p>
+    <ul>
+      <li>Suspicious visual keyword: &#x27;paypal&#x27;</li>
+    </ul>
+    
+    <a href="#" class="export-btn" onclick="alert('Export to PDF: TBD')">
+      📄 Export as PDF
+    </a>
+  </div>
+</body>
+</html>

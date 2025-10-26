@@ -1,0 +1,31 @@
+#!/bin/bash
+cd ~/projects/linkshield_project
+source venv/bin/activate
+clear
+echo "✅ Environment activated. You're now in linkshield_project."
+echo ""
+
+echo "What would you like to do?"
+echo "1) Run link scanner tests"
+echo "2) Open Chromium with https://httpbin.org/redirect/2"
+echo "3) Exit"
+echo ""
+read -p "> " choice
+
+case $choice in
+  1)
+    echo "▶️ Running link scanner tests..."
+    DEBUG_TIMING=1 python3 -m unittest scanner/test_link_scanner.py
+    ;;
+  2)
+    echo "🌐 Launching Chromium..."
+    chromium https://httpbin.org/redirect/2
+    ;;
+  3)
+    echo "👋 Goodbye!"
+    exit 0
+    ;;
+  *)
+    echo "❌ Invalid option. Please try again."
+    ;;
+esac

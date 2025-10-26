@@ -1,0 +1,179 @@
+{
+  "tests": [
+    {
+      "url": "https://expired.badssl.com",
+      "final_url": null,
+      "status": "malicious",
+      "risk_score": 100,
+      "reasons": [
+        "Fetch error: Page.goto: net::ERR_CERT_DATE_INVALID at https://expired.badssl.com/\nCall log:\n  - navigating to \"https://expired.badssl.com/\", waiting until \"networkidle\"\n"
+      ],
+      "raw": {
+        "url": "https://expired.badssl.com",
+        "status_code": null,
+        "final_url": null,
+        "load_time_ms": null,
+        "redirects": [],
+        "cookies": [],
+        "console_messages": [],
+        "iframes": [],
+        "screenshot": null,
+        "error": "Page.goto: net::ERR_CERT_DATE_INVALID at https://expired.badssl.com/\nCall log:\n  - navigating to \"https://expired.badssl.com/\", waiting until \"networkidle\"\n",
+        "network_requests": [],
+        "network_analysis": null,
+        "signals": {
+          "iframe": {
+            "suspicious_iframes_found": false,
+            "reasons": []
+          },
+          "visual": {
+            "suspicious": false,
+            "alerts": [],
+            "ocr_text": ""
+          },
+          "js": {
+            "suspicious_js_found": false,
+            "alerts": [],
+            "matched_patterns": [],
+            "match_count": 0,
+            "console_entries": [],
+            "html_entries": [],
+            "js_raw_entries": []
+          }
+        }
+      }
+    },
+    {
+      "url": "https://example.com",
+      "final_url": "https://example.com/",
+      "status": "safe",
+      "risk_score": 0,
+      "reasons": [],
+      "raw": {
+        "url": "https://example.com",
+        "status_code": 200,
+        "final_url": "https://example.com/",
+        "load_time_ms": 3877,
+        "redirects": [],
+        "cookies": [],
+        "console_messages": [],
+        "iframes": [],
+        "screenshot": null,
+        "error": null,
+        "network_requests": [
+          {
+            "url": "https://example.com/",
+            "method": "GET",
+            "resource_type": "document",
+            "post_data": null
+          }
+        ],
+        "network_analysis": {
+          "suspicious_network_found": false,
+          "reasons": []
+        },
+        "signals": {
+          "iframe": {
+            "suspicious_iframes_found": false,
+            "reasons": []
+          },
+          "visual": {
+            "suspicious": false,
+            "alerts": [],
+            "ocr_text": ""
+          },
+          "js": {
+            "suspicious_js_found": false,
+            "alerts": [],
+            "matched_patterns": [],
+            "match_count": 0,
+            "console_entries": [],
+            "html_entries": [],
+            "js_raw_entries": []
+          }
+        }
+      }
+    },
+    {
+      "url": "https://accounts.google.com/login",
+      "final_url": "https://accounts.google.com/v3/signin/identifier?dsh=S-1842188244%3A1761208281483687&ifkv=AfYwgwWHs9eFs0G5FiD_zMzNrEQvT9ZRdF-B9Hi41HwXU71kadJDrI5J3mLJ0ZAwoQM2k9GZIq6HXQ&flowName=WebLiteSignIn&flowEntry=ServiceLogin",
+      "status": "safe",
+      "risk_score": 0,
+      "reasons": [],
+      "raw": {
+        "url": "https://accounts.google.com/login",
+        "status_code": 200,
+        "final_url": "https://accounts.google.com/v3/signin/identifier?dsh=S-1842188244%3A1761208281483687&ifkv=AfYwgwWHs9eFs0G5FiD_zMzNrEQvT9ZRdF-B9Hi41HwXU71kadJDrI5J3mLJ0ZAwoQM2k9GZIq6HXQ&flowName=WebLiteSignIn&flowEntry=ServiceLogin",
+        "load_time_ms": 4078,
+        "redirects": [],
+        "cookies": [],
+        "console_messages": [],
+        "iframes": [],
+        "screenshot": null,
+        "error": null,
+        "network_requests": [
+          {
+            "url": "https://accounts.google.com/login",
+            "method": "GET",
+            "resource_type": "document",
+            "post_data": null
+          },
+          {
+            "url": "https://accounts.google.com/InteractiveLogin?dsh=S-1842188244:1761208281483687&ifkv=AfYwgwXEVgFCd-TR2W6bPlf4FIRZetZU4II-KU8Fn0LfKimW_D7TZk3bvaX5JE5TUpsJ5nAJcNu8Jw",
+            "method": "GET",
+            "resource_type": "document",
+            "post_data": null
+          },
+          {
+            "url": "https://accounts.google.com/v3/signin/identifier?dsh=S-1842188244%3A1761208281483687&ifkv=AfYwgwWHs9eFs0G5FiD_zMzNrEQvT9ZRdF-B9Hi41HwXU71kadJDrI5J3mLJ0ZAwoQM2k9GZIq6HXQ&flowName=WebLiteSignIn&flowEntry=ServiceLogin",
+            "method": "GET",
+            "resource_type": "document",
+            "post_data": null
+          },
+          {
+            "url": "https://ssl.gstatic.com/images/branding/googlelogo/2x/googlelogo_color_74x24dp.png",
+            "method": "GET",
+            "resource_type": "image",
+            "post_data": null
+          },
+          {
+            "url": "https://accounts.google.com/_/bscframe",
+            "method": "GET",
+            "resource_type": "document",
+            "post_data": null
+          },
+          {
+            "url": "https://accounts.google.com/generate_204?ysT_Iw",
+            "method": "GET",
+            "resource_type": "image",
+            "post_data": null
+          }
+        ],
+        "network_analysis": {
+          "suspicious_network_found": false,
+          "reasons": []
+        },
+        "signals": {
+          "iframe": {
+            "suspicious_iframes_found": false,
+            "reasons": []
+          },
+          "visual": {
+            "suspicious": false,
+            "alerts": [],
+            "ocr_text": ""
+          },
+          "js": {
+            "suspicious_js_found": false,
+            "alerts": [],
+            "matched_patterns": [],
+            "match_count": 0,
+            "console_entries": [],
+            "html_entries": [],
+            "js_raw_entries": []
+          }
+        }
+      }
+    }
+  ]
+}

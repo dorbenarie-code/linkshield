@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LinkShield Scan Dashboard</title>
+  
+:root {
+  --clr-bg: #fafbfc;
+  --clr-primary: #2c3e50;
+  --clr-secondary: #34495e;
+  --clr-accent: #3498db;
+  --clr-low: #27ae60;
+  --clr-med: #f1c40f;
+  --clr-high: #e74c3c;
+  --clr-text: #2d3e50;
+  --clr-row-hover: #f0f3f5;
+  --transition: 0.25s ease;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  padding: 2rem;
+  line-height: 1.5;
+}
+header, main, footer { max-width: 1200px; margin: 0 auto; }
+header h1 {
+  text-align: center;
+  color: var(--clr-primary);
+  margin-bottom: 1rem;
+}
+.stats { text-align: center; margin-bottom: 1.5rem; }
+.chart-wrapper {
+  max-width: 350px;
+  margin: 0 auto 2rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 300px;
+}
+nav.legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+.legend-item { display: flex; align-items: center; gap: 0.5rem; }
+.legend-color {
+  width: 14px; height: 14px; border-radius: 2px; display: inline-block;
+}
+.legend-color.low  { background: var(--clr-low); }
+.legend-color.med  { background: var(--clr-med); }
+.legend-color.high { background: var(--clr-high); }
+
+.filter-container {
+  text-align: center; margin-bottom: 1rem;
+}
+.filter-input {
+  padding: 0.5rem;
+  width: 100%; max-width: 400px;
+  border: 1px solid var(--clr-secondary);
+  border-radius: 4px;
+  transition: border-color var(--transition);
+}
+.filter-input:focus {
+  outline: none; border-color: var(--clr-accent);
+}
+
+table {
+  width: 100%; border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+caption {
+  caption-side: top; text-align: left;
+  font-size: 1.1rem; margin-bottom: 0.5rem;
+}
+th, td { padding: 0.75rem 1rem; text-align: left; }
+th {
+  background: var(--clr-secondary);
+  color: #fff; font-weight: 600;
+}
+tbody tr {
+  background: #fff; transition: background var(--transition);
+}
+tbody tr:hover {
+  background: var(--clr-row-hover);
+}
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: transform var(--transition);
+}
+.badge:hover { transform: scale(1.05); }
+.badge.clean      { background: var(--clr-low); }
+.badge.suspicious { background: var(--clr-high); }
+
+.progress-container {
+  background: #e0e6eb;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.progress-bar {
+  height: 100%; transition: width var(--transition);
+}
+.progress-bar.low  { background: var(--clr-low); }
+.progress-bar.med  { background: var(--clr-med); }
+.progress-bar.high { background: var(--clr-high); }
+
+</head>
+<body>
+  <header>
+    <h1>🔍 LinkShield Scan Dashboard</h1>
+  </header>
+  <main>
+    <section class="stats" aria-label="Summary statistics">
+      Total: 3 |
+      Passed: 2 |
+      Failed: 1 |
+      Duration: 0.0s
+    </section>
+    <section class="chart-wrapper" aria-label="Results chart">
+      <canvas id="pieChart" role="img" aria-label="Passed vs Failed"></canvas>
+    </section>
+    <nav class="legend" aria-label="Risk legend">
+      <div class="legend-item"><span class="legend-color low"></span> Low</div>
+      <div class="legend-item"><span class="legend-color med"></span> Medium</div>
+      <div class="legend-item"><span class="legend-color high"></span> High</div>
+    </nav>
+    <div class="filter-container">
+      <label for="filterInput">Filter URLs:</label>
+      <input id="filterInput" class="filter-input" type="search" placeholder="Type to filter…" />
+    </div>
+    <table aria-describedby="table-caption">
+      <caption id="table-caption">Scanned URLs and status</caption>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">URL</th>
+          <th scope="col">Status</th>
+          <th scope="col">Risk</th>
+          <th scope="col">HTML</th>
+          <th scope="col">PDF</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+<tr>
+  <td>1</td>
+  <td class="url">https://expired.badssl.com</td>
+  <td><span class="badge suspicious">Malicious</span></td>
+  <td>
+    <div class="progress-container">
+      <div class="progress-bar high" style="width:100%"></div>
+    </div>
+    <span aria-label="Risk score">100</span>
+  </td>
+  <td><a href="#" target="_blank" aria-label="View HTML report">🔍</a></td>
+  <td><a href="#"  target="_blank" aria-label="View PDF report">📄</a></td>
+</tr>
+
+<tr>
+  <td>2</td>
+  <td class="url">https://example.com</td>
+  <td><span class="badge clean">Clean</span></td>
+  <td>
+    <div class="progress-container">
+      <div class="progress-bar low" style="width:0%"></div>
+    </div>
+    <span aria-label="Risk score">0</span>
+  </td>
+  <td><a href="#" target="_blank" aria-label="View HTML report">🔍</a></td>
+  <td><a href="#"  target="_blank" aria-label="View PDF report">📄</a></td>
+</tr>
+
+<tr>
+  <td>3</td>
+  <td class="url">https://accounts.google.com/login</td>
+  <td><span class="badge clean">Clean</span></td>
+  <td>
+    <div class="progress-container">
+      <div class="progress-bar low" style="width:30%"></div>
+    </div>
+    <span aria-label="Risk score">30</span>
+  </td>
+  <td><a href="#" target="_blank" aria-label="View HTML report">🔍</a></td>
+  <td><a href="#"  target="_blank" aria-label="View PDF report">📄</a></td>
+</tr>
+      </tbody>
+    </table>
+  </main>
+  <footer>
+    <p style="text-align:center; padding:1rem 0; font-size:0.9rem; color:var(--clr-secondary);">
+      Generated on 2025-05-21T15:53:41.989302
+    </p>
+  </footer>
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Render the doughnut chart
+function renderChart(passed, failed) {
+  const ctx = document.getElementById("pieChart").getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Passed", "Failed"],
+      datasets: [{
+        data: [passed, failed],
+        backgroundColor: ["#27ae60","#e74c3c"],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "bottom", labels: { boxWidth: 12 } }
+      },
+      aria: { enabled: true, label: 'Test results doughnut chart' }
+    }
+  });
+}
+
+// Table filter functionality
+function filterTable() {
+  const query = document.getElementById("filterInput").value.toLowerCase();
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    const url = tr.querySelector('td.url').textContent.toLowerCase();
+    tr.style.display = url.includes(query) ? "" : "none";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const passed = 2, failed = 1;
+  renderChart(passed, failed);
+  document.getElementById("filterInput")
+          .addEventListener("input", filterTable);
+});
+</script>
+
+</body>
+</html>

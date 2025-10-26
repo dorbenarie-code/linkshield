@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkshield"
+version = "0.1.0"
+description = "Smart URL Threat Scanner - Phishing and malicious link detection"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    {name = "Dorcolus", email = "dormahalal@gmail.com"}
+]
+keywords = ["security", "phishing", "url-scanner", "threat-detection"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "playwright>=1.52.0",
+    "fastapi>=0.115.12",
+    "uvicorn>=0.34.2",
+    "pydantic>=2.11.5",
+    "python-dotenv>=1.1.0",
+    "pytesseract>=0.3.13",
+    "pillow>=11.2.1",
+    "weasyprint>=65.1",
+    "beautifulsoup4>=4.13.4",
+    "cryptography>=44.0.3",
+    "pytest>=8.3.5",
+    "pytest-html>=4.1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-html>=4.1.1",
+    "pytest-metadata>=3.1.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "scripts*"]
+exclude = ["tests*", "venv*", ".venv*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --tb=short"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.pyright]
+include = ["app", "tests", "scripts"]
+exclude = ["venv", "venv*", "**/__pycache__"]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "standard"
+reportMissingTypeStubs = false
+

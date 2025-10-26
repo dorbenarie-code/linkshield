@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>LinkShield Scan Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .box { border: 1px solid #ccc; padding: 1.5rem; border-radius: 8px; max-width: 800px; }
+    .status { font-weight: bold; color: #2ecc71; }
+    .score  { font-weight: bold; color: #2ecc71; }
+    .export-btn {
+      display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem;
+      text-decoration: none; border: 1px solid #34495e; border-radius: 4px;
+    }
+    .screenshot img { max-width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+  <h1>🔍 LinkShield Scan Report</h1>
+  <div class="box">
+    <p><strong>URL:</strong> https://paypal.com</p>
+    <p><strong>Status:</strong> <span class="status">clean</span></p>
+    <p><strong>Risk Score:</strong> <span class="score">0</span></p>
+
+    <p><strong>Reasons:</strong></p>
+    <ul><li>No issues detected</li></ul>
+    
+
+    <a href="#" class="export-btn" onclick="alert('Export to PDF: TBD')">
+      📄 Export as PDF
+    </a>
+    <a href="scan_report.pdf" class="export-btn" download>⬇️ Download PDF</a>
+  </div>
+</body>
+</html>
