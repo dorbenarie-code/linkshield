@@ -21,7 +21,7 @@ import json
 from datetime import datetime
 from typing import List, Dict, Any
 
-utils.report_stats import summarize_tests
+from app.utils.report_stats import summarize_tests
 from utils.report_utils import safe_write
 
 

@@ -5,8 +5,6 @@ import logging
 from typing import Any, Dict, List, cast
 from urllib.parse import urlparse
 import ipaddress
-
-# ------- Signals: runtime-safe imports with fallbacks (לא משנה לוגיקה) -------
 try:
     from app.scanner.signals.js_behavior_signal import detect_js_behaviors  # type: ignore[reportMissingImports]
 except Exception:
@@ -25,8 +23,6 @@ except Exception:
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-# לא מוסיפים handlers ברמת מודול; הקונפיג הכללי נעשה בנקודת הכניסה (uvicorn/main)
-
 def _norm_reasons(x: Any) -> List[str]:
     """נרמול reasons לרשימת strings נקייה"""
     if not isinstance(x, list):
@@ -64,17 +60,17 @@ class LinkScanner:
     Orchestrates fetching a URL and evaluating it against multiple security signals.
     """
     SUSPICIOUS_THRESHOLD = 50
-    MALICIOUS_THRESHOLD = 95  # מוגבר מ-90 ל-95 כדי שredirect+iframe (90) יישארו suspicious
+    MALICIOUS_THRESHOLD = 95  
     MAX_SCORE = 100
     IFRAME_SUSP_SCORE = 60
     REDIRECT_SCORE = 10
-    SAFE_IFRAME_BASE = 10  # כשיש iframe בטוח ולא חשוד
+    SAFE_IFRAME_BASE = 10  
     SIGNAL_WEIGHTS = {
         "console": 10,
         "redirect": 30,
         "url_keyword": 30,
         "ocr": 30,
-        "iframe": 60,  # מוגבר מ-30 ל-60 כדי לעמוד בדרישות הטסטים
+        "iframe": 60,  
         "js": 25,
     }
     SUSPICIOUS_REDIRECT_COUNT = 2
