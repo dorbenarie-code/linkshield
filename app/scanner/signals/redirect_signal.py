@@ -1,5 +1,5 @@
 from typing import Any
-from .types import SignalResult
+from app.scanner.signals.types import SignalResult
 
 def detect_redirects(result: Any, threshold: int = 2) -> SignalResult:
     """Unified format: reasons + meta; reason string remains identical."""

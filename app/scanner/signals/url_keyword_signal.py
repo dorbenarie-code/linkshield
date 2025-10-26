@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from typing import List
-from .types import SignalResult
+from app.scanner.signals.types import SignalResult
 
 SUSPICIOUS_KEYWORDS: List[str] = ["phish", "secure", "login"]
 
