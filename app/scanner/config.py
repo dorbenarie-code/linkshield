@@ -1,6 +1,9 @@
 # app/scanner/config.py
 from dataclasses import dataclass, field
-from typing import Dict, Mapping, Optional, Any
+from typing import Mapping, Optional, Any
+
+# תיעודי בלבד: המפתחות הנפוצים אצלך; לא מחייב
+WeightMap = Mapping[str, int]
 
 @dataclass(frozen=True)
 class ScannerConfig:
@@ -8,7 +11,7 @@ class ScannerConfig:
     redirect_threshold: int = 2
     network_timeout_ms: Optional[int] = None
     # שומרים מקום למשקלים בעתיד, אבל לא משתמשים בהם בשלב הזה כדי לא לשנות התנהגות
-    signal_weights: Mapping[str, int] = field(default_factory=dict)
+    signal_weights: WeightMap = field(default_factory=dict)
 
 def from_scanner(scanner: Any) -> ScannerConfig:
     """שולף את הערכים הקיימים מה-Scanner כדי לא לשנות התנהגות."""
