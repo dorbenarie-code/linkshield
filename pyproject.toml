@@ -61,3 +61,16 @@ venv = ".venv"
 typeCheckingMode = "standard"
 reportMissingTypeStubs = false
 
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["htmlcov", ".venv", "venv", "venv310"]
+
+[tool.ruff.lint]
+select = ["E","F","I","UP","B","PIE","SIM","TCH"]
+ignore = ["E203","E402","E501","B904","SIM108"]  # מתעלמים מבעיות קיימות, לא משנים קוד
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+combine-as-imports = true
+
