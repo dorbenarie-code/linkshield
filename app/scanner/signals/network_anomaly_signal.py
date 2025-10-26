@@ -1,4 +1,5 @@
 # app/scanner/signals/network_anomaly_signal.py
+"""Network anomaly signal: TLS/SSL/DNS/Timeout וכו'. מחזיר reasons + meta."""
 
 import logging
 from urllib.parse import urlparse, parse_qs, ParseResult

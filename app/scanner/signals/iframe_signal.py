@@ -1,4 +1,5 @@
 # scanner/signals/iframe_signal.py
+"""Iframe signal: מזהה iframes חשודים (hidden/large/unsandboxed). מחזיר reasons."""
 
 import logging
 from typing import Any, Dict, List, Tuple

@@ -1,3 +1,4 @@
+"""Redirect signal: מזהה ריבוי רידיירקטים. מחזיר reasons + meta."""
 from typing import Any
 from app.scanner.signals.types import SignalResult
 

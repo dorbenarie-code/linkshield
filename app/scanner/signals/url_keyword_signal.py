@@ -1,3 +1,4 @@
+"""URL keyword signal: מזהה מילות חשד ב־domain של ה־URL. מחזיר reasons + meta."""
 from urllib.parse import urlparse
 from typing import List
 from app.scanner.signals.types import SignalResult
