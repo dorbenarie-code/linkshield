@@ -16,6 +16,11 @@ except Exception:
     def detect_suspicious_iframes(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
         return {}
 try:
+    from app.scanner.signals.redirect_signal import has_multiple_redirects  # type: ignore[reportMissingImports]
+except Exception:
+    def has_multiple_redirects(_: Any, threshold: int = 2) -> bool:  # fallback
+        return False
+try:
     from app.scanner.signals.visual_signal import detect_visual_signals  # type: ignore[reportMissingImports]
 except Exception:
     def detect_visual_signals(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
@@ -222,8 +227,9 @@ class LinkScanner:
                 "Detected console messages",
                 score_increment=self.SIGNAL_WEIGHTS["console"]
             )
-        # 4. Multiple redirects
-        if self._has_multiple_redirects(raw.get("redirects", [])):
+        # 4. Multiple redirects (moved to signal)
+        thr = getattr(self, "SUSPICIOUS_REDIRECT_COUNT", 2)
+        if has_multiple_redirects(raw, threshold=thr):
             self._mark_suspicious(
                 result,
                 "Multiple redirects detected",
@@ -287,8 +293,7 @@ class LinkScanner:
         result.status = "malicious"
         result.risk_score = self.MAX_SCORE
 
-    def _has_multiple_redirects(self, redirects: List[str]) -> bool:
-        return len(redirects) >= self.SUSPICIOUS_REDIRECT_COUNT
+    # הוחלף ע"י has_multiple_redirects ב-signal; אין שינוי התנהגות.
 
     # הוחלף ע"י has_suspicious_url_keyword ב-signal; אין שינוי התנהגות.
 
