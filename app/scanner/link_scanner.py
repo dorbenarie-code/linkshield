@@ -5,6 +5,7 @@ import logging
 from typing import Any, Dict, List, cast
 from urllib.parse import urlparse
 import ipaddress
+from app.scanner.config import from_scanner  # קונפיג מרכזי (ללא שינוי התנהגות)
 try:
     from app.scanner.signals.js_behavior_signal import detect_js_behaviors  # type: ignore[reportMissingImports]
 except Exception:
@@ -111,8 +112,9 @@ class LinkScanner:
             result.risk_score = baseline_score
             # status ו-reasons ייבנו ב-_evaluate
 
-            # --- Preflight: network/SSL/DNS anomalies (moved to signal) ---
-            net_anomalies = collect_network_anomalies(normalized, raw)
+            # --- Preflight: network/SSL/DNS anomalies (via signal) ---
+            cfg = from_scanner(self)
+            net_anomalies = collect_network_anomalies(normalized, raw, timeout_ms=cfg.network_timeout_ms)
             if net_anomalies["reasons"]:
                 # הוספה ללא כפילויות
                 for e in net_anomalies["reasons"]:
@@ -203,6 +205,7 @@ class LinkScanner:
         return False
 
     def _evaluate(self, raw: Dict[str, Any], signals: Dict[str, Dict[str, Any]], result: ScanResult) -> None:
+        cfg = from_scanner(self)
         # 1. fetch errors → malicious
         if raw.get("error"):
             self._mark_malicious(result, f"Fetch error: {raw['error']}")
@@ -220,8 +223,7 @@ class LinkScanner:
                 score_increment=self.SIGNAL_WEIGHTS["console"]
             )
         # 4. Multiple redirects (signal, unified result)
-        thr = getattr(self, "SUSPICIOUS_REDIRECT_COUNT", 2)
-        rd = detect_redirects(raw, threshold=thr)
+        rd = detect_redirects(raw, threshold=cfg.redirect_threshold)
         for r in rd.get("reasons", []):
             self._mark_suspicious(result, r, score_increment=self.SIGNAL_WEIGHTS["redirect"])
         # 5. URL keywords (signal, unified result)
