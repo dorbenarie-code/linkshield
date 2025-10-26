@@ -77,9 +77,7 @@ class LinkScanner:
     SUSPICIOUS_THRESHOLD = 50
     MALICIOUS_THRESHOLD = 95  
     MAX_SCORE = 100
-    IFRAME_SUSP_SCORE = 60
-    REDIRECT_SCORE = 10
-    SAFE_IFRAME_BASE = 10  
+    SAFE_IFRAME_BASE = 10  # baseline score for non-suspicious iframes
     SIGNAL_WEIGHTS = {
         "console": 10,
         "redirect": 30,
@@ -144,25 +142,14 @@ class LinkScanner:
             result.final_url = raw.get("final_url", "")
             self._evaluate(raw, signals, result)
 
-            # --- Iframe heuristic (גיבוי אם הסיגנל לא החזיר סיבה) ---
-            # נסתר/גדול => suspicious + ≥60; אחרת, אם יש iframe בטוח → בסיס 10
+            # --- Baseline scoring: safe iframes get minimal score ---
             iframes_any: Any = raw.get("iframes") or []
-            if isinstance(iframes_any, list):
-                frames: List[Dict[str, Any]] = [cast(Dict[str, Any], f) for f in cast(List[Any], iframes_any)]
-                if len(frames) > 0:
-                    # בדוק אם כבר הוספנו reason על iframe ב-_evaluate
-                    has_iframe_reason = any("iframe" in str(r).lower() for r in result.reasons)
-                    if self._is_hidden_large_iframe(frames):
-                        if not has_iframe_reason:
-                            result.reasons.append("Hidden iframe detected")
-                            # רק אם הסיגנל לא הוסיף כבר ציון, נוסיף בעצמנו
-                            result.risk_score = max(result.risk_score, self.IFRAME_SUSP_SCORE)
-                        if result.status == "safe":
-                            result.status = "suspicious"
-                    else:
-                        # יש iframe אבל אינו חשוד → בסיס 10 (לפי הטסט iframe-safe)
-                        if not has_iframe_reason:
-                            result.risk_score = max(result.risk_score, self.SAFE_IFRAME_BASE)
+            if isinstance(iframes_any, list) and len(cast(List[Any], iframes_any)) > 0:
+                # If there are iframes but signal didn't flag them as suspicious, apply baseline score
+                has_iframe_reason = any("iframe" in str(r).lower() for r in result.reasons)
+                if not has_iframe_reason:
+                    result.risk_score = max(result.risk_score, self.SAFE_IFRAME_BASE)
+
         except Exception as e:
             self.logger.exception("Unhandled exception during scan")
             result.status = "malicious"
@@ -304,20 +291,4 @@ class LinkScanner:
 
     # הוחלף ע"י collect_network_anomalies ב-signal; אין שינוי התנהגות.
 
-    # --- Heuristics ---
-    def _is_hidden_large_iframe(self, frames: List[Dict[str, Any]]) -> bool:
-        for fr in frames:
-            try:
-                w = float(fr.get("width", 0) or 0)
-                h = float(fr.get("height", 0) or 0)
-                opacity = fr.get("opacity", "")
-                disp = str(fr.get("display", "")).lower()
-                vis = str(fr.get("visibility", "")).lower()
-                sandbox = fr.get("sandbox", None)
-                hidden = (str(opacity) in ("0", "0.0")) or (disp == "none") or (vis == "hidden") or (sandbox in (None, ""))
-                large = (w >= 800) or (h >= 600)
-                if hidden and large:
-                    return True
-            except Exception:
-                continue
-        return False
+    # הוחלף ע"י detect_suspicious_iframes (signal); אין שינוי התנהגות.
