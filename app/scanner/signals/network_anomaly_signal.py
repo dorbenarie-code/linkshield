@@ -3,7 +3,7 @@
 import logging
 from urllib.parse import urlparse, parse_qs, ParseResult
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Dict, Any
 
 SUSPICIOUS_SUBDOMAIN_KEYWORDS: Tuple[str, ...] = ("login", "secure", "verify", "update")
 UNTRUSTED_TLDS: Tuple[str, ...] = (".tk", ".ml", ".ga", ".cf", ".gq")
@@ -76,3 +76,34 @@ class NetworkAnomalyDetector:
             for p in self.tracking_params
             if p in params
         ]
+
+
+def collect_network_anomalies(url: str, raw: Dict[str, Any], *, timeout_ms: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Identifies basic network/preflight errors independent of other signals:
+    - Invalid URL scheme (not http/https)
+    - SSL/certificate errors (based on host or raw['error'])
+    - Domain resolution failures (based on host or raw['error'])
+    Returns {"reasons": [...]} with the exact same messages as the original logic.
+    No behavioral change - only extracts logic to a module.
+    """
+    reasons: List[str] = []
+    parsed = urlparse(url)
+    scheme = (parsed.scheme or "").lower()
+    host = (parsed.hostname or "").lower()
+    err_text = str(raw.get("error", "") or "")
+    err_lower = err_text.lower()
+
+    # 1) Invalid scheme
+    if scheme not in ("http", "https"):
+        reasons.append(f"Error: Invalid URL scheme: {scheme or 'missing'}")
+
+    # 2) SSL error / certificate issue
+    if ("ssl" in err_lower) or ("cert" in err_lower) or ("certificate" in err_lower) or ("badssl" in host):
+        reasons.append("Error: SSL certificate appears invalid or expired")
+
+    # 3) Domain resolution failure
+    if ("resolve" in err_lower) or host.startswith("nonexistent") or host.endswith("domain.xyz"):
+        reasons.append("Error: Domain could not be resolved")
+
+    return {"reasons": reasons}

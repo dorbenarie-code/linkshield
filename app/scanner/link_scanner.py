@@ -21,6 +21,11 @@ except Exception:
     def has_multiple_redirects(_: Any, threshold: int = 2) -> bool:  # fallback
         return False
 try:
+    from app.scanner.signals.network_anomaly_signal import collect_network_anomalies  # type: ignore[reportMissingImports]
+except Exception:
+    def collect_network_anomalies(url: str, raw: Dict[str, Any], *, timeout_ms: Any = None) -> Dict[str, Any]:  # fallback
+        return {"reasons": []}
+try:
     from app.scanner.signals.visual_signal import detect_visual_signals  # type: ignore[reportMissingImports]
 except Exception:
     def detect_visual_signals(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
@@ -108,11 +113,11 @@ class LinkScanner:
             result.risk_score = baseline_score
             # status ו-reasons ייבנו ב-_evaluate
 
-            # --- Preflight: הזרקת שגיאות שכבתיות (URL/SSL/Resolve) לפני הסיגנלים ---
-            pre_errors: List[str] = self._preflight_errors(normalized, raw)
-            if pre_errors:
+            # --- Preflight: network/SSL/DNS anomalies (moved to signal) ---
+            net_anomalies = collect_network_anomalies(normalized, raw)
+            if net_anomalies["reasons"]:
                 # הוספה ללא כפילויות
-                for e in pre_errors:
+                for e in net_anomalies["reasons"]:
                     if e not in result.reasons:
                         result.reasons.append(e)
                 # שגיאות כאלה הן קריטיות → מרימים ציון וסטטוס
@@ -297,34 +302,7 @@ class LinkScanner:
 
     # הוחלף ע"י has_suspicious_url_keyword ב-signal; אין שינוי התנהגות.
 
-    def _preflight_errors(self, url: str, raw: Dict[str, Any]) -> List[str]:
-        """
-        מזהה שגיאות בסיסיות שלא תלויות בסיגנלים:
-        - סכימה לא חוקית (לא http/https)
-        - SSL שגוי/פג תוקף (לפי host או raw['error'])
-        - דומיין לא פתיר (לפי host או raw['error'])
-        מוסיף רק reasons; את הסטטוס/ציון מרים הקוראת.
-        """
-        reasons: List[str] = []
-        parsed = urlparse(url)
-        scheme = (parsed.scheme or "").lower()
-        host = (parsed.hostname or "").lower()
-        err_text = str(raw.get("error", "") or "")
-        err_lower = err_text.lower()
-
-        # 1) סכימה לא חוקית
-        if scheme not in ("http", "https"):
-            reasons.append(f"Error: Invalid URL scheme: {scheme or 'missing'}")
-
-        # 2) SSL שגוי / תעודה בעייתית
-        if ("ssl" in err_lower) or ("cert" in err_lower) or ("certificate" in err_lower) or ("badssl" in host):
-            reasons.append("Error: SSL certificate appears invalid or expired")
-
-        # 3) דומיין שלא נפתר
-        if ("resolve" in err_lower) or host.startswith("nonexistent") or host.endswith("domain.xyz"):
-            reasons.append("Error: Domain could not be resolved")
-
-        return reasons
+    # הוחלף ע"י collect_network_anomalies ב-signal; אין שינוי התנהגות.
 
     # --- Heuristics ---
     def _is_hidden_large_iframe(self, frames: List[Dict[str, Any]]) -> bool:
