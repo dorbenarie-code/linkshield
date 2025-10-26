@@ -20,6 +20,11 @@ try:
 except Exception:
     def detect_visual_signals(raw: Dict[str, Any]) -> Dict[str, Any]:  # fallback
         return {}
+try:
+    from app.scanner.signals.url_keyword_signal import has_suspicious_url_keyword  # type: ignore[reportMissingImports]
+except Exception:
+    def has_suspicious_url_keyword(url: str) -> bool:  # fallback
+        return False
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -224,8 +229,8 @@ class LinkScanner:
                 "Multiple redirects detected",
                 score_increment=self.SIGNAL_WEIGHTS["redirect"]
             )
-        # 5. URL keywords
-        if self._has_suspicious_keyword(result.final_url):
+        # 5. URL keywords (moved to signal)
+        if has_suspicious_url_keyword(result.final_url):
             self._mark_suspicious(
                 result,
                 "Suspicious keywords in URL",
@@ -285,10 +290,7 @@ class LinkScanner:
     def _has_multiple_redirects(self, redirects: List[str]) -> bool:
         return len(redirects) >= self.SUSPICIOUS_REDIRECT_COUNT
 
-    def _has_suspicious_keyword(self, url: str) -> bool:
-        domain = str(urlparse(url).netloc or "").lower()
-        blacklist = ["phish", "secure", "login"]
-        return any(keyword in domain for keyword in blacklist)
+    # הוחלף ע"י has_suspicious_url_keyword ב-signal; אין שינוי התנהגות.
 
     def _preflight_errors(self, url: str, raw: Dict[str, Any]) -> List[str]:
         """
