@@ -26,3 +26,12 @@ htmlcov/
 *.pem
 *.key
 *.crt
+
+# venv & build
+.venv/
+venv/
+**/venv/
+__pycache__/
+*.pyc
+build/
+dist/
