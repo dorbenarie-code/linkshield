@@ -1,19 +1,25 @@
 # LinkShield — Smart URL Threat Scanner
 
-**LinkShield** is a modular, Python-based system designed to scan URLs and detect malicious patterns through multiple security analysis layers. It provides a clean REST API, deterministic risk scoring, and comprehensive threat detection capabilities.
+LinkShield is a Python-based security tool for analyzing URLs and detecting
+malicious behavior using multiple independent signals.
 
-The system combines JavaScript behavior analysis, iframe detection, redirect chain monitoring, visual inspection via OCR, and network anomaly detection to provide accurate security assessments.
+Instead of relying on a single heuristic, it combines runtime browser analysis,
+network inspection, and visual signals to produce a deterministic risk score
+and a clear verdict: safe, suspicious, or malicious.
+
+The project was built with an emphasis on reliability, testability, and
+production-style architecture rather than quick demos.
 
 ---
 
-## Key Features
-
-- **Multi-Signal Detection Engine** — Combines JS behavior, iframe analysis, redirect monitoring, visual/OCR inspection, and network anomaly detection
-- **Deterministic Risk Scoring** — Consistent risk scores (0-100), status classification (safe/suspicious/malicious), and detailed reason tracking
-- **REST API with FastAPI** — Clean endpoints for scanning, health checks, and interactive API documentation
-- **Production-Ready** — Full type coverage, 45/45 tests passing, zero lint warnings, Docker-ready deployment
-- **Interactive Reporting** — Generate HTML and PDF reports with visual charts and detailed analysis
-- **Modular Architecture** — Clean separation between executors, signals, scanners, and services
+## What it does 
+- Multi-signal URL analysis combining JavaScript behavior, iframe detection,
+  redirect chains, visual/OCR inspection, and network anomalies
+- Deterministic risk scoring (0–100) with clear classification:
+  safe / suspicious / malicious
+- REST API built with FastAPI, including health checks and interactive docs
+- Fully tested codebase (45+ tests) with Docker-ready deployment
+- Modular architecture that keeps scanning logic, signals, and execution isolated
 
 ---
 
